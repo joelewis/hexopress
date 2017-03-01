@@ -1,0 +1,51 @@
+body {
+    font-family: "PT Serif", Georgia, Times, "Times New Roman", serif;
+    background: #f9f9f9;
+}
+
+.hexo-container {
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+.hero-container {
+    height: 500px;
+}
+
+.hexo-hero-text {
+    font-size: 72px;
+}
+
+.hexo-hero-subtext {
+    font-size: 36px;
+}
+
+.footer {
+    background: #d4d4d4;
+    margin-top: 100px;
+    padding: 10px;
+}
+
+.footer-p {
+    margin: 0px;
+}
+
+#brand-logo {
+    font-size: 25px;
+    color: #000;
+}
+
+.bg-grey {
+    background: #f3f3f3;
+}
+
+.stick-to-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.startblog-card {
+    margin: 10px;
+}

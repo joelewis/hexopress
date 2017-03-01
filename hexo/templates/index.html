@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <script src="/static/bin/bundle.js"></script>
+    <link rel="stylesheet" href="/static/bin/css/spectre.min.css" />
+    <link rel="stylesheet" href="/static/bin/css/hexopress.css" />
+    <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
+    </script>
+    <script>
+      function start() {
+        gapi.load('auth2', function() {
+          auth2 = gapi.auth2.init({
+            client_id: '71939397023-lk2br5jcppmipoh0hk965mj84q78vjn1.apps.googleusercontent.com',
+            // Scopes to request in addition to 'profile' and 'email'
+            //scope: 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file'
+          });
+        });
+      }
+    </script>
+</head>
+
+<body>
+    <div class="container grid-960 hexo-container">
+        <div class="columns">
+            <div class="column col-10">&nbsp;</div>
+            <div class="column col-2">
+                <a href="/login" class="btn">Login with Google</a>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column col-12">
+                <div class="hero-container">
+                    <div class="hexo-hero-text">
+                        HexoPress
+                    </div>
+                    <div class="hexo-hero-subtext">
+                        Blog from your google docs.
+                    </div>
+                    <div class="hexo-hero-subtext">
+                        <a href="/login">Start Blogging Now!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="hero-container">
+                <div class="hexo-hero-text">
+                    How?
+                </div>
+                <div class="hexo-hero-subtext">
+                    Create a folder named 'blog' in your google drive.
+                    That's all! Every google doc from the folder, will be a post in your HexoPress blog.
+                </div>
+                <div class="hexo-hero-subtext">
+                    <a href="/login">Get started now.</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="columns">
+            <div class="hero-container">
+                <div class="hexo-hero-text">
+                    Why?
+                </div>
+                <div class="hexo-hero-subtext">
+                    The project is based off Octopress. Octopress is for hackers with terminals and gits. Hexopress takes the elegance of Octopress and combines it with the beautiful, powerful & easily accessible Google Docs.
+                    Not everytime you have a brilliant idea, you have access to a markdown editor or a terminal. With Google Docs you can now write anywhere, on any device and still, get a blog out of them in a click!
+                </div>
+                <div class="hexo-hero-subtext">
+                    <a href="/login">Login with google.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <footer class="footer">
+        <section id="copyright" class="grid-footer container grid-960">
+          <p class="footer-p">Designed and built with ♥ by <a href="https://twitter.com/vettijoe" target="_blank">Joe Lewis</a>. Licensed under the <a href="https://github.com/picturepan2/spectre/blob/master/LICENSE" target="_blank">MIT License</a>.</p>
+        </section>
+    </footer>
+</body>
+
+</html>
