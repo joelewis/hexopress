@@ -1,5 +1,5 @@
 import json
-import os, io, subprocess
+import os, io, subprocess, urllib
 import datetime, dateutil.parser
 import shutil, errno
 
@@ -31,12 +31,30 @@ def index(request):
     """
     if not request.user.is_authenticated():
         template = loader.get_template('index.html')
+        return HttpResponse(template.render({
+            "user": {},
+        }, request))
     else:
         template = loader.get_template('loggedin_index.html')
-    
-    return HttpResponse(template.render({
-        "user": request.user
-    }, request))
+        blog = BlogSettings.objects.get(user=request.user)
+        googleuser = GoogleUser.objects.get(user=request.user)
+        print request.user.first_name
+        print 1 if request.user.first_name else 0
+        return HttpResponse(template.render({
+            "user": {
+                "email": request.user.email,
+                "name": request.user.first_name,
+                "username": request.user.username,
+                "accountinfo_filled": 1 if request.user.first_name else 0,
+            },
+            "blog": {
+                "title": blog.title or '',
+                "subtitle": blog.subtitle or '',
+                "description": blog.description or '',
+                "is_generated": 1 if googleuser.is_site_generated else 0,
+            }
+        }, request))
+
 
 def get_credentials(googleuser):
     return client.AccessTokenCredentials(googleuser.access_token, 'web client')
@@ -52,7 +70,6 @@ def get_plus_service(googleuser):
     http_auth = cred.authorize(httplib2.Http())
     plus_service = discovery.build('plus', 'v1', http=http_auth)
     return plus_service
-    
 
 @csrf_exempt
 def google_login(request): 
@@ -311,7 +328,7 @@ def refresh_accesstoken(request):
                 settings.CLIENT_SECRET_FILE,
                 scope='https://www.googleapis.com/auth/drive profile email',
                 redirect_uri='http://localhost:8000/oauth2callback')
-    flow.params['state'] = request.GET.get('next') or '/'
+    flow.params['state'] = urllib.urlencode(request.GET)
     # flow.params['access_type'] = 'offline'         # offline access
     # flow.params['include_granted_scopes'] = 'true'   # incremental auth
     auth_uri = flow.step1_get_authorize_url()
@@ -319,6 +336,7 @@ def refresh_accesstoken(request):
 
 def oauth2callback(request):
     auth_code = request.GET['code']
+    print auth_code
     credentials = client.credentials_from_clientsecrets_and_code(
         settings.CLIENT_SECRET_FILE,
         ['https://www.googleapis.com/auth/drive', 'profile', 'email'],
@@ -342,5 +360,48 @@ def oauth2callback(request):
     googleuser.guser_id = guser_id
     googleuser.save()
     login(request, user)
-    redirect_uri = request.GET.get('state') or '/'
+    state = request.GET.get('state')
+    if state:
+        param = state
+    else:
+        param = ''
+    redirect_uri = '/?' + param
     return HttpResponseRedirect(redirect_uri)
+
+@login_required
+@csrf_exempt
+def blog_settings(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        subtitle = request.POST.get('subtitle')
+        description = request.POST.get('description')
+        
+        blogsettings, created = BlogSettings.objects.get_or_create(
+            user=request.user)
+        blogsettings.title = title
+        blogsettings.subtitle = subtitle
+        blogsettings.description = description
+        blogsettings.save()
+
+    return HttpResponseRedirect('/?task=generate_blog')
+
+@login_required
+@csrf_exempt
+def account_settings(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        name = request.POST.get('name')
+
+        print request.POST
+        if not len(username):
+            return HttpResponseRedirect('/app/settings/account')
+        
+        user = request.user
+        try:
+            user.username = username
+            user.first_name = name
+            user.save()
+        except:
+            return HttpResponseRedirect('/app/settings/account')
+    
+    return HttpResponseRedirect('/?task=generate_blog')

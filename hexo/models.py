@@ -11,3 +11,18 @@ class GoogleUser(models.Model):
     refresh_token = models.CharField(max_length=255, null=True)
     is_site_generated = models.BooleanField(default=False)
     guser_id = models.CharField(max_length=255, null=True)
+
+        # this is not needed if small_image is created at set_image
+    def save(self, *args, **kwargs):
+        if not BlogSettings.objects.filter(user=self.user).exists():
+            blogsettings = BlogSettings(user=self.user)
+            blogsettings.save()
+        super(GoogleUser, self).save(*args, **kwargs)
+
+
+class BlogSettings(models.Model):
+    user = models.OneToOneField(User)
+    title = models.CharField(max_length=255, null=True)
+    subtitle = models.TextField(null=True)
+    description = models.TextField(null=True)
+

@@ -25,6 +25,10 @@ urlpatterns = [
     url(r'^refreshblog/$', views.refresh_blog, name='refresh_blog'),
     url(r'^generateblog/$', views.generate_blog, name='generate_blog'),
     url(r'^oauth2callback/$', views.oauth2callback),
-    url(r'^login/$', views.refresh_accesstoken, name='login'),
+    url(r'^login/$', views.refresh_accesstoken),
+    url(r'^settings/blog/$', views.blog_settings),
+    url(r'^settings/account/$', views.account_settings),
+
     url(r'^@(?P<username>[-\w.]+)/(?P<path>.*)$', views.serve_blog),
+    url(r'^app/.*/$', views.index, name='index'),
 ]

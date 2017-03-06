@@ -49,3 +49,25 @@ body {
 .startblog-card {
     margin: 10px;
 }
+
+.blog-generate-progress {
+    margin-top: 20px;
+}
+
+.form-container {
+    margin: 10px;
+    width: 80%;
+}
+
+.sidebar-link:focus {
+    color: inherit !important;
+    box-shadow: none !important;
+}
+
+.hexopress-blog-link {
+    text-decoration: underline;
+}
+
+.hexopress-keyword {
+    color: #5764c6;
+}

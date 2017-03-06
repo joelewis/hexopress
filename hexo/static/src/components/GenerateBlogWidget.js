@@ -1,6 +1,90 @@
 import React from 'react'
+import socket from '../socket'
+import Utils from '../utils'
 
 class GenerateBlogWidget extends React.Component {
+    constructor(props) {
+        super(props)
+        this.info = {
+            just_generated: "Your blog has been generated. Next time you write a post in your google drive folder, hit 'Refresh' to refresh your blog.",
+            generate: "Looks like you haven't started your blog yet.",
+            refresh: "We've dropped a folder named 'hexopress' into your gdrive. Go ahead, write posts and save it under that folder. When you hit refresh, those posts will show up in your blog.",
+            inprogress_refresh: "Refreshing your blog...",
+            inprogress_generate: "Generating your blog...",
+            folder: "We will be dropping a folder named 'hexopress' into your drive. When you write a post, put the google doc inside this folder."
+        }
+        
+        this.state = {
+            initiated: false,
+            progress: 0,
+            showingFolderInfo: false,
+            generated: window.hexopress.is_generated,
+            info: this.info.refresh
+        }
+
+        // subscribe
+        $(document).on('blog_generation_initiated', (e, data) => {
+            this.setState({
+                initiated: true,
+                info: this.state.generated ? this.info.inprogress_refresh : this.info.inprogress_generate,
+                progress: 20
+            })
+        })
+        
+        $(document).on('blog_generation_progress', (e, data) => {
+            this.setState({
+                progress: data.progress
+            })
+            if (data.info) {
+                this.setState({
+                    info: data.info
+                })
+            }
+        })
+        
+        $(document).on('blog_generation_folder_created', (e, data) => {
+             this.setState({
+                 showingFolderInfo: true
+            })
+        })
+        
+        $(document).on('blog_generated', (e, data) => {
+            this.setState({
+                generated: true,
+                info: this.info.just_generated,
+                progress: 100
+            })
+        })
+        
+        $(document).on('access_token_expired', this.reLogin)
+    }
+
+    componentDidMount() {
+        socket.addEventListener('open', function() {
+            // socket.trigger('fetch_blog_status', {})
+
+            // Bad place to put this code. Must revisit.
+            const searchParams = Utils.getSearchParams()
+            if (searchParams && searchParams.task) {
+                socket.trigger(searchParams.task, {})
+            }
+        })
+    }
+
+    reLogin() {
+        window.location.href= '/login?task=generate_blog'
+    }
+
+    generateBlog() {
+        if (this.state.progress > 0 && this.state.progress < 100) {
+            // already in progress
+            return;
+        }
+        this.setState({
+            progress: 0
+        })
+        socket.trigger('generate_blog', {})
+    }
 
     render() {
         return (
@@ -9,14 +93,27 @@ class GenerateBlogWidget extends React.Component {
                     {/*<img class="img-responsive" src="img/osx-el-capitan.jpg" title="" style="">*/}
                 </div>
                 <div className="card-header">
-                    <div className="card-title">http://hexopress.com/@lewis.joe.18</div>
-                    {/*<div className="card-meta">Software and hardware</div>*/}
+                    <div className="card-title">
+                        <a 
+                        className="hexopress-blog-link"
+                        href={"http://localhost:8000/@" + hexopress.user.username}
+                        target="_blank">
+                            hexopress.com/@{hexopress.user.username}
+                        </a>
+                    </div>
                 </div>
                 <div className="card-body">
-                    Looks like you haven't started your blog yet.
+                    {this.state.info}
                 </div>
                 <div className="card-footer">
-                    <a href="#cards" className="btn btn-primary">Generate blog now</a>
+                    <a href="#" 
+                        onClick={this.generateBlog.bind(this)} 
+                        className={"btn btn-primary " + ((this.state.progress > 0 && this.state.progress < 100) ? "disabled": "")}>
+                        Refresh blog        
+                    </a>
+                </div>
+                <div className="bar bar-sm blog-generate-progress">
+                    <div className="bar-item" role="progressbar" aria-valuenow="80" style={{ width: this.state.progress+'%'}} aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
         )

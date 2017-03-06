@@ -13,7 +13,7 @@ const NavBar = (props) => {
                     <section className="navbar-section float-right">
                         <div className="dropdown">
                             <a href="#" className="btn btn-primary dropdown-toggle" tabIndex="0">
-                                {window.hexopress.user_email} <i className="icon-caret"></i>
+                                {window.hexopress.user.email} <i className="icon-caret"></i>
                             </a>
                             <ul className="menu">
                                 <li className="menu-item">
