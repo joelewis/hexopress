@@ -1,11 +1,13 @@
 node_modules
 settings.py
+production_settings.py
 conversions
 blogs
 octopress
 client_secret.json
 db.sqlite3
 gdrivedemo.py
+local.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

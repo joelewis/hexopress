@@ -327,7 +327,7 @@ def refresh_accesstoken(request):
     flow = client.flow_from_clientsecrets(
                 settings.CLIENT_SECRET_FILE,
                 scope='https://www.googleapis.com/auth/drive profile email',
-                redirect_uri='http://localhost:8000/oauth2callback')
+                redirect_uri=settings.HOST_ADDR+'/oauth2callback')
     flow.params['state'] = urllib.urlencode(request.GET)
     # flow.params['access_type'] = 'offline'         # offline access
     # flow.params['include_granted_scopes'] = 'true'   # incremental auth
@@ -341,7 +341,7 @@ def oauth2callback(request):
         settings.CLIENT_SECRET_FILE,
         ['https://www.googleapis.com/auth/drive', 'profile', 'email'],
         auth_code,
-        redirect_uri='http://localhost:8000/oauth2callback')
+        redirect_uri=settings.HOST_ADDR+'/oauth2callback')
     # credentials = flow.step2_exchange(auth_code)
     print credentials.id_token
     email = credentials.id_token['email']
