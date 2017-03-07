@@ -6,6 +6,7 @@ import MainLayout from './components/MainLayout'
 import HomePage from './components/HomePage'
 import BlogSettingsForm from './components/BlogSettingsForm'
 import AccountSettingsForm from './components/AccountSettingsForm'
+import FaqPage from './components/FaqPage.js'
 
 import socket from './socket'
 
@@ -28,6 +29,7 @@ if (window.hexopress) {
                     <Route path="blog" component={() => (<BlogSettingsForm settings={hexopress.blog} />)} />
                     <Route path="account" component={() => (<AccountSettingsForm settings={hexopress.user} />)} />
                 </Route>
+                <Route path="/app/faq" component={FaqPage} />
             </Route>
         </Router>
     ), document.getElementById('root'))

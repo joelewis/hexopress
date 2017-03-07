@@ -27,6 +27,9 @@ class MainLayout extends React.Component {
                                 <li className={"nav-item " + (this.props.location.pathname === '/app/settings/account' ? 'active' : '')}>
                                     <Link className="sidebar-link" to="/app/settings/account">Account Settings</Link>
                                 </li>
+                                <li className={"nav-item " + (this.props.location.pathname === '/app/faq' ? 'active' : '')}>
+                                    <Link className="sidebar-link" to="/app/faq">FAQ</Link>
+                                </li>
                             </ul>
                         </div>
                         <div className="col-9">

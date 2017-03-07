@@ -71,3 +71,8 @@ body {
 .hexopress-keyword {
     color: #5764c6;
 }
+
+.faq-question {
+    border-bottom: 1px solid #e2e2e2;
+    margin-top: 10px;
+}
