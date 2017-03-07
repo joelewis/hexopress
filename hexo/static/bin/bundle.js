@@ -12765,7 +12765,7 @@ var GenerateBlogWidget = function (_React$Component) {
                             'a',
                             {
                                 className: 'hexopress-blog-link',
-                                href: "http://localhost:8000/@" + hexopress.user.username,
+                                href: _utils2.default.getHost() + '/@' + hexopress.user.username,
                                 target: '_blank' },
                             _utils2.default.getHost(),
                             '/@',
