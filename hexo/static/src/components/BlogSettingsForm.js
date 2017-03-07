@@ -13,7 +13,7 @@ class BlogSettingsForm extends React.Component {
         return (
             <div className="form-container">
                 <form action="/settings/blog/" method="POST" ref="form">
-                    <div className="form-group">
+                    <div className="form-group form-group-hexopress">
                         <label className="form-label" >Blog Title</label>
                         <input 
                             className="form-input" 
@@ -22,7 +22,7 @@ class BlogSettingsForm extends React.Component {
                             type="text" 
                             placeholder="My Awesome Blog" />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group form-group-hexopress">
                         <label className="form-label" >Blog Subtitle</label>
                         <input 
                             className="form-input" 
@@ -31,7 +31,7 @@ class BlogSettingsForm extends React.Component {
                             type="text" 
                             placeholder="Random thoughts on code & philiosphy" />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group form-group-hexopress">
                         <label className="form-label" >A short description of the blog</label>
                         <textarea 
                             className="form-input" 

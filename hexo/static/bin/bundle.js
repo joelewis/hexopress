@@ -12164,7 +12164,7 @@ var AccountSettingsForm = function (_React$Component) {
                     { action: '/settings/account/', method: 'POST', ref: 'form' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group form-group-hexopress' },
                         _react2.default.createElement(
                             'label',
                             { className: 'form-label' },
@@ -12188,7 +12188,7 @@ var AccountSettingsForm = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group form-group-hexopress' },
                         _react2.default.createElement(
                             'label',
                             { className: 'form-label' },
@@ -12270,7 +12270,7 @@ var BlogSettingsForm = function (_React$Component) {
                     { action: '/settings/blog/', method: 'POST', ref: 'form' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group form-group-hexopress' },
                         _react2.default.createElement(
                             'label',
                             { className: 'form-label' },
@@ -12285,7 +12285,7 @@ var BlogSettingsForm = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group form-group-hexopress' },
                         _react2.default.createElement(
                             'label',
                             { className: 'form-label' },
@@ -12300,7 +12300,7 @@ var BlogSettingsForm = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group form-group-hexopress' },
                         _react2.default.createElement(
                             'label',
                             { className: 'form-label' },

@@ -8,7 +8,7 @@ class AccountSettingsForm extends React.Component {
         return (
             <div className="form-container">
                 <form action="/settings/account/" method="POST" ref="form">
-                    <div className="form-group">
+                    <div className="form-group form-group-hexopress">
                         <label className="form-label" >Choose your username</label>
                         <div className="input-group">
                             <span className="input-group-addon">hexopress.com/@</span>
@@ -21,7 +21,7 @@ class AccountSettingsForm extends React.Component {
                         </div>
                         
                     </div>
-                    <div className="form-group">
+                    <div className="form-group form-group-hexopress">
                         <label className="form-label" >Your name</label>
                         <input
                             className="form-input" 
