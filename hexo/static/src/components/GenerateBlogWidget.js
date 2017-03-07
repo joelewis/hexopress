@@ -98,7 +98,7 @@ class GenerateBlogWidget extends React.Component {
                         className="hexopress-blog-link"
                         href={"http://localhost:8000/@" + hexopress.user.username}
                         target="_blank">
-                            hexopress.com/@{hexopress.user.username}
+                            {Utils.getHost()}/@{hexopress.user.username}
                         </a>
                     </div>
                 </div>

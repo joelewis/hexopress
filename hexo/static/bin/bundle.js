@@ -5530,6 +5530,14 @@ var Utils = function () {
             t.innerHTML = escapedStr;
             return t.value;
         }
+    }, {
+        key: 'getHost',
+        value: function getHost() {
+            if (!window.location.origin) {
+                window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+            }
+            return window.location.origin;
+        }
     }]);
 
     return Utils;
@@ -12759,7 +12767,8 @@ var GenerateBlogWidget = function (_React$Component) {
                                 className: 'hexopress-blog-link',
                                 href: "http://localhost:8000/@" + hexopress.user.username,
                                 target: '_blank' },
-                            'hexopress.com/@',
+                            _utils2.default.getHost(),
+                            '/@',
                             hexopress.user.username
                         )
                     )
