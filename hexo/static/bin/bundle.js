@@ -12612,7 +12612,7 @@ var Footer = function Footer(props) {
                 ", using amazing open source projects, coffee and boredom | ",
                 _react2.default.createElement(
                     "a",
-                    { href: "https://github.com/picturepan2/spectre/blob/master/LICENSE", target: "_blank" },
+                    { target: "_blank", href: "https://github.com/joelewis/hexopress" },
                     "Source"
                 )
             )
