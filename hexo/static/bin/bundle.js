@@ -12363,8 +12363,8 @@ var FaqPage = function FaqPage(props) {
                 " Write to me: ",
                 _react2.default.createElement(
                     "a",
-                    { href: "#" },
-                    "lewis.joe.18@gmail.com"
+                    { href: "mailto:joe@hexopress.com" },
+                    "joe@hexopress.com"
                 ),
                 ". I'll try to be as useful as possible."
             )

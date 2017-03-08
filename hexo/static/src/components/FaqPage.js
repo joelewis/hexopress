@@ -5,7 +5,7 @@ const FaqPage = (props) => {
         <div>
             <div className="faq-question">
                 <h5> I have a problem using HexoPress. What do I do? </h5>
-                <p> Write to me: <a href="#">lewis.joe.18@gmail.com</a>. I'll try to be as useful as possible.</p>
+                <p> Write to me: <a href="mailto:joe@hexopress.com">joe@hexopress.com</a>. I'll try to be as useful as possible.</p>
             </div>
 
             <div className="faq-question">
