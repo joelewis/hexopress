@@ -25,4 +25,4 @@ const FaqPage = (props) => {
     )
 }
 
-export default FaqPage
+export default FaqPage;
