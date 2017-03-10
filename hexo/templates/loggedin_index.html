@@ -23,15 +23,15 @@
     <script>
         window.hexopress = {
             user: {
-                email: '{{ user.email }}',
-                username: '{{ user.username }}',
-                name: '{{ user.name }}',
+                email: '{{ user.email | escapejs }}',
+                username: '{{ user.username | escapejs }}',
+                name: '{{ user.name | escapejs }}',
                 accountinfo_filled: {{ user.accountinfo_filled }}
             },
             blog: {
-                title: '{{ blog.title }}',
-                subtitle: '{{ blog.subtitle }}',
-                description: '{{ blog.description }}',
+                title: '{{ blog.title | escapejs }}',
+                subtitle: '{{ blog.subtitle | escapejs }}',
+                description: '{{ blog.description | escapejs }}',
                 is_generated: {{ blog.is_generated }},
             }
         };

@@ -1,7 +1,5 @@
-// import $ from 'jquery'
 import PubSub from 'pubsub-js'
 
-// window.PubSub = PubSub
 var socket = new WebSocket("ws://" + window.location.host + "/");
 
 socket.onmessage = function(e) {
@@ -22,6 +20,4 @@ socket.trigger = function(event, data) {
     socket.send(JSON.stringify(message))
 }
 
-// window.socket = socket; // debug
-// window.$ = $; // debug
 export default socket
