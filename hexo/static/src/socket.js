@@ -1,12 +1,15 @@
-import $ from 'jquery'
+// import $ from 'jquery'
+import PubSub from 'pubsub-js'
 
+// window.PubSub = PubSub
 var socket = new WebSocket("ws://" + window.location.host + "/");
 
 socket.onmessage = function(e) {
     console.log(e.data)
     const message = JSON.parse(e.data)
     if (message.event) {
-        $(document).trigger(message.event, message.data);
+        PubSub.publish(message.event, message.data);
+        // $(document).trigger(message.event, message.data);
     }
 }
 
@@ -19,6 +22,6 @@ socket.trigger = function(event, data) {
     socket.send(JSON.stringify(message))
 }
 
-window.socket = socket; // debug
-window.$ = $; // debug
+// window.socket = socket; // debug
+// window.$ = $; // debug
 export default socket

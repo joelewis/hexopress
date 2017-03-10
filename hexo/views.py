@@ -33,6 +33,7 @@ def index(request):
         template = loader.get_template('index.html')
         return HttpResponse(template.render({
             "user": {},
+            "STATIC_HOST": settings.STATIC_HOST
         }, request))
     else:
         template = loader.get_template('loggedin_index.html')
@@ -52,7 +53,8 @@ def index(request):
                 "subtitle": blog.subtitle or '',
                 "description": blog.description or '',
                 "is_generated": 1 if googleuser.is_site_generated else 0,
-            }
+            },
+            "STATIC_HOST": settings.STATIC_HOST,
         }, request))
 
 

@@ -10,7 +10,6 @@ import FaqPage from './components/FaqPage.js'
 
 import socket from './socket'
 
-
 // if not logged in, don't render component.
 if (window.hexopress) {
     ReactDOM.render((

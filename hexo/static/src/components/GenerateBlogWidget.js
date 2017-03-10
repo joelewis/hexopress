@@ -1,6 +1,7 @@
 import React from 'react'
 import socket from '../socket'
 import Utils from '../utils'
+import PubSub from 'pubsub-js'
 
 class GenerateBlogWidget extends React.Component {
     constructor(props) {
@@ -23,7 +24,7 @@ class GenerateBlogWidget extends React.Component {
         }
 
         // subscribe
-        $(document).on('blog_generation_initiated', (e, data) => {
+        PubSub.subscribe('blog_generation_initiated', data => {
             this.setState({
                 initiated: true,
                 info: this.state.generated ? this.info.inprogress_refresh : this.info.inprogress_generate,
@@ -31,7 +32,7 @@ class GenerateBlogWidget extends React.Component {
             })
         })
         
-        $(document).on('blog_generation_progress', (e, data) => {
+        PubSub.subscribe('blog_generation_progress', data => {
             this.setState({
                 progress: data.progress
             })
@@ -42,13 +43,13 @@ class GenerateBlogWidget extends React.Component {
             }
         })
         
-        $(document).on('blog_generation_folder_created', (e, data) => {
+        PubSub.subscribe('blog_generation_folder_created', data => {
              this.setState({
                  showingFolderInfo: true
             })
         })
         
-        $(document).on('blog_generated', (e, data) => {
+        PubSub.subscribe('blog_generated', data => {
             this.setState({
                 generated: true,
                 info: this.info.just_generated,
@@ -56,7 +57,7 @@ class GenerateBlogWidget extends React.Component {
             })
         })
         
-        $(document).on('access_token_expired', this.reLogin)
+        PubSub.subscribe('access_token_expired', this.reLogin)
     }
 
     componentDidMount() {
