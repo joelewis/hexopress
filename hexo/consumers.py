@@ -5,7 +5,11 @@ from hexo.ReplyChannel import ReplyChannel
 
 @channel_session_user
 def ws_message(message):
-    print message["text"]
+    if not message.user.is_authenticated():
+        return message.reply_channel.send({
+            "text": json.dumps({"error": "user not authenticated"})
+        })
+
     data = json.loads(message["text"])
     try:
         task = getattr(tasks, data["task"])
