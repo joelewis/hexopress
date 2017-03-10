@@ -24,7 +24,7 @@ class GenerateBlogWidget extends React.Component {
         }
 
         // subscribe
-        PubSub.subscribe('blog_generation_initiated', data => {
+        PubSub.subscribe('blog_generation_initiated', (e, data) => {
             this.setState({
                 initiated: true,
                 info: this.state.generated ? this.info.inprogress_refresh : this.info.inprogress_generate,
@@ -32,9 +32,11 @@ class GenerateBlogWidget extends React.Component {
             })
         })
         
-        PubSub.subscribe('blog_generation_progress', data => {
-            this.setState({
-                progress: data.progress
+        PubSub.subscribe('blog_generation_progress', (e, data) => {
+            this.setState(function() {
+                return {
+                    progress: data.progress
+                }
             })
             if (data.info) {
                 this.setState({
@@ -43,13 +45,13 @@ class GenerateBlogWidget extends React.Component {
             }
         })
         
-        PubSub.subscribe('blog_generation_folder_created', data => {
+        PubSub.subscribe('blog_generation_folder_created', (e, data) => {
              this.setState({
                  showingFolderInfo: true
             })
         })
         
-        PubSub.subscribe('blog_generated', data => {
+        PubSub.subscribe('blog_generated', (e, data) => {
             this.setState({
                 generated: true,
                 info: this.info.just_generated,
