@@ -136,26 +136,28 @@ def get_callback(file_meta, user):
             pass
     return callback
 
-def download_docx_files(user, service, files):
-    print "-------------------------------------------------------"
+def clean_conversion_dir(user):
     docx_dir = '{0}/{1}/docx'.format(settings.CONVERSION_DIR_ROOT,
-                                    user.email)
+                                     user.email)
     md_dir = '{0}/{1}/md'.format(settings.CONVERSION_DIR_ROOT,
-                                user.email)
-
+                                 user.email)
     if os.path.exists(docx_dir):
         shutil.rmtree(docx_dir)
     if os.path.exists(md_dir):
         shutil.rmtree(md_dir)
-    ensure_dir(md_dir)
-    
+
+def download_docx_files(user, service, files):
+    clean_conversion_dir(user)
+
     batch = service.new_batch_http_request()
     for file_meta in files:
         callback = get_callback(file_meta, user)
         # callback as closure
-        req = service.files().export_media(fileId=file_meta['id'], mimeType='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        req = service.files().export_media(
+            fileId=file_meta['id'],
+            mimeType='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         batch.add(req, callback=callback)
-    
+
     batch.execute()
 
 def copydir(src, dst):
@@ -249,7 +251,6 @@ def generate_blog(user_id, channel_id, message):
     2. convert those files to markdown and collect them 
        under .../conversions/email/md/
     """
-    print "hi hi hi hi hi hi hi hi hi hi hi hih ih i"
     reply_channel = ReplyChannel(channel_id)
     user = User.objects.get(id=user_id)
     googleuser = GoogleUser.objects.get(user=user)
@@ -283,15 +284,24 @@ def copy2octopress(reply_channel, googleuser):
     if not googleuser.is_site_generated:
         # call routine to generate octopress for that user
         create_octopress(user)
-    # copy source files
-    shutil.rmtree('{0}/{1}/octopress/source/_posts'.format(
-        settings.BLOG_DIR_ROOT, user.email))
 
+    # remove previous source posts
+    posts_src_dir = '{0}/{1}/octopress/source/_posts'.format(
+        settings.BLOG_DIR_ROOT, user.email)
+
+    if os.path.exists(posts_src_dir):
+        shutil.rmtree(posts_src_dir)
+
+    # copy source files
     copydir('{0}/{1}/md'.format(settings.CONVERSION_DIR_ROOT,
                                 user.email),
             '{0}/{1}/octopress/source/_posts'.format(settings.BLOG_DIR_ROOT,
                                                      user.email))
+
     reply_channel.send('blog_generation_progress', {"progress": 80})
+
+    # clean conversion directory to free some space
+    clean_conversion_dir(user)
     # run rake generate
     print '{0}/{1}/octopress'.format(settings.BLOG_DIR_ROOT, user.email)
     subprocess.call('rake generate',
