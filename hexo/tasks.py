@@ -122,7 +122,7 @@ def get_callback(file_meta, user):
             # reset path to proper http path
             content = content.replace(outputmedia, '/images')
             # also remove image size info injected by pandoc
-            rule = re.compile(r"(!\[\]\\(.*?\\))({.*?})", re.MULTILINE|re.DOTALL)
+            rule = re.compile("(!\[\]\\(.*?\\))({.*?})", re.MULTILINE|re.DOTALL)
             content = rule.sub(r'\1', content)
 
             with open(outputfile, 'w') as f:
