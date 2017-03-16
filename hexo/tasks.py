@@ -5,6 +5,7 @@ import os, io, subprocess
 import datetime, dateutil.parser
 import shutil, errno
 import logging
+import re
 
 from django.template import loader
 from django.conf import settings
@@ -104,13 +105,29 @@ def get_callback(file_meta, user):
             outputfile = '{0}/{1}-{2}.markdown'.format(md_dir, 
                 created_time.strftime('%Y-%m-%d'),
                 slugify(file_name))
+
+            outputmedia = '{0}/{1}/octopress/source/images'.format(settings.BLOG_DIR_ROOT, user.email)
                 
             # convert file
             pypandoc.convert_file(
-                '{0}/{1}.docx'.format(docx_dir, file_name), 
-                'md', 
-                outputfile=outputfile)
-                    
+                '{0}/{1}.docx'.format(docx_dir, file_name),
+                'md',
+                outputfile=outputfile,
+                extra_args=['--extract-media='+outputmedia])
+
+            # replace links
+            with open(outputfile, 'r') as f:
+                content = f.read()
+
+            # reset path to proper http path
+            content = content.replace(outputmedia, '/images')
+            # also remove image size info injected by pandoc
+            rule = re.compile(r"(!\[\]\\(.*?\\))({.*?})", re.MULTILINE|re.DOTALL)
+            content = rule.sub(r'\1', content)
+
+            with open(outputfile, 'w') as f:
+                f.write(content)
+
             # prepend yaml_matter to converted file
             # TODO: do this in-place, rather than in-memory
             prepend2file(outputfile, yaml_matter)
@@ -120,6 +137,7 @@ def get_callback(file_meta, user):
     return callback
 
 def download_docx_files(user, service, files):
+    print "-------------------------------------------------------"
     docx_dir = '{0}/{1}/docx'.format(settings.CONVERSION_DIR_ROOT,
                                     user.email)
     md_dir = '{0}/{1}/md'.format(settings.CONVERSION_DIR_ROOT,
@@ -231,6 +249,7 @@ def generate_blog(user_id, channel_id, message):
     2. convert those files to markdown and collect them 
        under .../conversions/email/md/
     """
+    print "hi hi hi hi hi hi hi hi hi hi hi hih ih i"
     reply_channel = ReplyChannel(channel_id)
     user = User.objects.get(id=user_id)
     googleuser = GoogleUser.objects.get(user=user)
