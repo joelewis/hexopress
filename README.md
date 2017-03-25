@@ -7,7 +7,7 @@ This project is directly based upon the amazing [Octopress](http://octopress.org
 HexoPress is a web layer that authenticates the user with google, takes their blog posts from a folder in their google drive, generate a static blog out of it and serves them at a URL.
 
 ## Dev Setup
-Install dependencies: 
+Install dependencies:
 * Pandoc - http://pandoc.org/
 * Ruby - http://rvm.io/
 * Git - https://git-scm.com/
@@ -15,7 +15,7 @@ Install dependencies:
 * Octopress - http://octopress.org
 * Redis - http://redis.org
 
-Project setup:  
+### Project Setup:  
 
 Clone the repo `$ git clone https://github.com/joelewis/hexopress`  
 
@@ -24,9 +24,13 @@ Create a python virtual env and install python dependencies into it.
 `$ . venv/bin/activate`  
 `$ pip install -r requirements.txt`  
 
-Rename `hexopress/sample_settings.py` to `hexopress/settings.py`  
+Setup an Octopress instance - [http://octopress.org/docs/setup/](http://octopress.org/docs/setup/).
 
-Tweak the config to suit yours. 
+Rename `hexopress/sample_settings.py` to `hexopress/settings.py`
+
+Edit `settings.py` to suit yours.
+
+### Run Server
 
 Run Interface Server:  
 `daphne hexopress.asgi:channel_layer -b 0.0.0.0 -p 8000`
