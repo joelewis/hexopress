@@ -7,9 +7,9 @@ class GenerateBlogWidget extends React.Component {
     constructor(props) {
         super(props)
         this.info = {
-            just_generated: "Your blog has been generated. Next time you write a post in your google drive folder, hit 'Refresh' to refresh your blog.",
+            just_generated: "Your blog has been generated. Next time you write a post in your google drive folder, come back here and hit 'Refresh blog' to sync.",
             generate: "Looks like you haven't started your blog yet.",
-            refresh: "We've dropped a folder named 'hexopress' into your gdrive. Go ahead, write posts and save it under that folder. When you hit refresh, those posts will show up in your blog.",
+            refresh: "We've dropped a folder named 'hexopress' into your gdrive. Go ahead, write posts and save it under that folder. When you hit 'Refresh blog', those posts will show up in your blog.",
             inprogress_refresh: "Refreshing your blog...",
             inprogress_generate: "Generating your blog...",
             folder: "We will be dropping a folder named 'hexopress' into your drive. When you write a post, put the google doc inside this folder."

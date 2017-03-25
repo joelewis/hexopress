@@ -61,7 +61,7 @@ def ensure_dir(path):
     user_dir_exist = os.path.exists(path)
     if not user_dir_exist:
         # create user dir
-        os.makedirs(path)    
+        os.makedirs(path)
 
 def prepend2file(outfile, content):
     with io.open(outfile, 'r+', encoding="utf-8") as f:
@@ -125,6 +125,9 @@ def get_callback(file_meta, user):
             rule = re.compile("(!\[\]\\(.*?\\))({.*?})", re.MULTILINE|re.DOTALL)
             content = rule.sub(r'\1', content)
 
+            # understand code blocks
+            
+
             with open(outputfile, 'w') as f:
                 f.write(content)
 
@@ -170,25 +173,18 @@ def copydir(src, dst):
             # directory already exists. it's ok to pass.
             pass
 
-def create_octopress(user):
-    googleuser = GoogleUser.objects.get(user=user)
-    
+def refresh_config(user):
     title = user.first_name + "'s Blog"
     subtitle = "Thoughts, Musings & Stories"
     description = ""
     author = user.first_name 
-    
+
     if BlogSettings.objects.filter(user=user).exists():
         blogsettings = BlogSettings.objects.get(user=user)
         title = blogsettings.title or title
         subtitle = blogsettings.subtitle or subtitle
         description = blogsettings.description or description
 
-    copydir(settings.OCTOPRESS_CLONE, '{0}/{1}/octopress'.format(
-        settings.BLOG_DIR_ROOT,
-        user.email
-    ))
-    
     # configure blog
     config_file_template = loader.get_template('config.yml.html')
     config_file = config_file_template.render({
@@ -202,7 +198,17 @@ def create_octopress(user):
         settings.BLOG_DIR_ROOT,
         user.email
     ), config_file)
+
+def create_octopress(user):
+    googleuser = GoogleUser.objects.get(user=user)
+
+    copydir(settings.OCTOPRESS_CLONE, '{0}/{1}/octopress'.format(
+        settings.BLOG_DIR_ROOT,
+        user.email
+    ))
     
+    refresh_config(user)
+
     googleuser.is_site_generated = True
     googleuser.save()
 
@@ -280,10 +286,13 @@ def copy2octopress(reply_channel, googleuser):
 
     user = googleuser.user
     ensure_dir('{0}/{1}'.format(settings.BLOG_DIR_ROOT, user.email))
-    googleuser.is_site_generated = False
+    # googleuser.is_site_generated = False
     if not googleuser.is_site_generated:
         # call routine to generate octopress for that user
         create_octopress(user)
+
+    # refresh config
+    refresh_config(user)
 
     # remove previous source posts
     posts_src_dir = '{0}/{1}/octopress/source/_posts'.format(
@@ -322,3 +331,11 @@ def fetch_blog_status(user_id, channel_id, message):
     googleuser = GoogleUser.objects.get(user=user)
 
     reply_channel.send('blog_status_fetched', {"generated": googleuser.is_site_generated})
+
+
+# @app.task
+# def install_theme(user_id, chanel_id, message):
+#     """
+#     install theme into user's octopress instance.
+#     """
+#     git_url = message["data"]["theme_url"]
