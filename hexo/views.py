@@ -39,8 +39,7 @@ def index(request):
         template = loader.get_template('loggedin_index.html')
         blog = BlogSettings.objects.get(user=request.user)
         googleuser = GoogleUser.objects.get(user=request.user)
-        print request.user.first_name
-        print 1 if request.user.first_name else 0
+        
         return HttpResponse(template.render({
             "user": {
                 "email": request.user.email,
@@ -53,6 +52,7 @@ def index(request):
                 "subtitle": blog.subtitle or '',
                 "description": blog.description or '',
                 "is_generated": 1 if googleuser.is_site_generated else 0,
+                "ga_id": blog.ga_id or '',
             },
             "STATIC_HOST": settings.STATIC_HOST,
         }, request))

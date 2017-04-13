@@ -45,8 +45,9 @@ class BlogSettingsForm extends React.Component {
                         <label className="form-label" >Google Analytics Tracking ID</label>
                         <input
                             className="form-input" 
-                            name="ga_id" 
-                            placeholder="UA-93513402-2" 
+                            name="ga_id"
+                            defaultValue={Utils.unescapeHTML(this.props.settings.ga_id)} 
+                            placeholder="UA-93513402-2"
                             type="text">
                         </input>
                     </div>
