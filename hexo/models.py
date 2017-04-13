@@ -25,4 +25,5 @@ class BlogSettings(models.Model):
     title = models.CharField(max_length=255, null=True)
     subtitle = models.TextField(null=True)
     description = models.TextField(null=True)
+    ga_id = models.CharField(max_length=255, null=True)
 

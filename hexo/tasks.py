@@ -184,6 +184,7 @@ def refresh_config(user):
         title = blogsettings.title or title
         subtitle = blogsettings.subtitle or subtitle
         description = blogsettings.description or description
+        ga_id = blogsettings.ga_id or ""
 
     # configure blog
     config_file_template = loader.get_template('config.yml.html')
@@ -193,6 +194,7 @@ def refresh_config(user):
         "author": author,
         "username": user.username,
         "description": description,
+        "ga_id": ga_id
     })
     write2file('{0}/{1}/octopress/_config.yml'.format(
         settings.BLOG_DIR_ROOT,

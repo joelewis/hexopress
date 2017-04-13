@@ -377,12 +377,14 @@ def blog_settings(request):
         title = request.POST.get('title')
         subtitle = request.POST.get('subtitle')
         description = request.POST.get('description')
+        ga_id = request.POST.get('ga_id')
         
         blogsettings, created = BlogSettings.objects.get_or_create(
             user=request.user)
         blogsettings.title = title
         blogsettings.subtitle = subtitle
         blogsettings.description = description
+        blogsettings.ga_id = ga_id
         blogsettings.save()
 
     return HttpResponseRedirect('/?task=generate_blog')

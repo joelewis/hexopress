@@ -41,7 +41,16 @@ class BlogSettingsForm extends React.Component {
                             rows="3">
                         </textarea>
                     </div>
-                    <button className="btn btn-primary" type="submit">Update</button>
+                    <div className="form-group form-group-hexopress">
+                        <label className="form-label" >Google Analytics Tracking ID</label>
+                        <input
+                            className="form-input" 
+                            name="ga_id" 
+                            placeholder="UA-93513402-2" 
+                            type="text">
+                        </input>
+                    </div>
+                    <button className="btn btn-primary form-group-hexopress" type="submit">Update</button>
                 </form>
             </div>
         )
