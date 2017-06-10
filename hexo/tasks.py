@@ -57,6 +57,12 @@ def get_files_from_folder(service, folder_id):
         fields="files(id, name, createdTime)").execute()
     return files
     
+def get_md_files_from_folder(service, folder_id):
+    files = service.files().list(
+        q="('{0}' in parents) and (mimeType = 'text/markdown')".format(folder_id),
+        fields="files(id, name, createdTime)").execute()
+    return files
+
 def ensure_dir(path):
     user_dir_exist = os.path.exists(path)
     if not user_dir_exist:
@@ -72,6 +78,42 @@ def prepend2file(outfile, content):
 def write2file(outfile, content):
     with open(outfile, 'w') as f:
         f.write(content)
+
+def remove_extn(filename):
+    return filename.split('.')[0]
+
+def get_md_callback(file_meta, user):
+    def callback(request_id, response, exception):
+        if exception is None:
+            file_name = file_meta['name'].replace(' ', '-')
+            file_name = remove_extn(file_name)
+            created_time_str = file_meta['createdTime']
+            created_time = dateutil.parser.parse(created_time_str)
+
+            md_dir = '{0}/{1}/md'.format(settings.CONVERSION_DIR_ROOT,
+                                         user.email)
+            ensure_dir(md_dir)
+
+            outputfile = '{0}/{1}-{2}.markdown'.format(md_dir,
+                                              created_time.strftime('%Y-%m-%d'),
+                                              slugify(file_name))
+
+            # write response to a md file
+            f = open(outputfile, 'w+')
+            f.write(response)
+            f.close()
+
+            template = loader.get_template('post_header_template.html')
+            yaml_matter = template.render({
+                "title": remove_extn(file_meta['name']),
+                "date": created_time_str,
+                "categories": ""
+            })
+
+            prepend2file(outputfile, yaml_matter)
+        else:
+            pass
+    return callback
 
 def get_callback(file_meta, user):
     def callback(request_id, response, exception):
@@ -107,7 +149,7 @@ def get_callback(file_meta, user):
                 slugify(file_name))
 
             outputmedia = '{0}/{1}/octopress/source/images'.format(settings.BLOG_DIR_ROOT, user.email)
-                
+            
             # convert file
             pypandoc.convert_file(
                 '{0}/{1}.docx'.format(docx_dir, file_name),
@@ -126,7 +168,7 @@ def get_callback(file_meta, user):
             content = rule.sub(r'\1', content)
 
             # understand code blocks
-            
+
 
             with open(outputfile, 'w') as f:
                 f.write(content)
@@ -150,8 +192,6 @@ def clean_conversion_dir(user):
         shutil.rmtree(md_dir)
 
 def download_docx_files(user, service, files):
-    clean_conversion_dir(user)
-
     batch = service.new_batch_http_request()
     for file_meta in files:
         callback = get_callback(file_meta, user)
@@ -162,6 +202,21 @@ def download_docx_files(user, service, files):
         batch.add(req, callback=callback)
 
     batch.execute()
+
+
+def download_md_files(user, service, files):
+    for file_meta in files:
+        file_id = file_meta['id']
+        callback = get_md_callback(file_meta, user)
+        # callback as closure
+        req = service.files().get_media(fileId=file_meta['id'])
+        try:
+            resp = req.execute()
+            callback(None, resp, None)
+        except:
+            # fail silently
+            # Father, forgive me for I have sinned.
+            pass
 
 def copydir(src, dst):
     try:
@@ -216,7 +271,6 @@ def create_octopress(user):
 
 def serve_blog(request, username, path):
     bloguser = User.objects.get(username=username)
-    print path
     if path.endswith('/') or not path: 
         path = path + '/index.html'
     else:
@@ -270,9 +324,12 @@ def generate_blog(user_id, channel_id, message):
         folder_id = get_folder(drive_service)
         # get all google docs files from the folder
         files = get_files_from_folder(drive_service, folder_id)
+        md_files = get_md_files_from_folder(drive_service, folder_id)
         reply_channel.send('blog_generation_progress', {"progress": 40})
         response = files
+        clean_conversion_dir(user)
         download_docx_files(user, drive_service, files['files'])
+        download_md_files(user, drive_service, md_files['files'])
         reply_channel.send('blog_generation_progress', {"progress": 60})
         copy2octopress(reply_channel, googleuser)
     except client.AccessTokenCredentialsError:
@@ -314,7 +371,6 @@ def copy2octopress(reply_channel, googleuser):
     # clean conversion directory to free some space
     clean_conversion_dir(user)
     # run rake generate
-    print '{0}/{1}/octopress'.format(settings.BLOG_DIR_ROOT, user.email)
     subprocess.call('rake generate',
                     cwd='{0}/{1}/octopress'.format(settings.BLOG_DIR_ROOT,
                                                    user.email),
