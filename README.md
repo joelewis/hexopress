@@ -39,7 +39,39 @@ Run workers for websockets/http handling:
 `python manage.py runworker -v 2`  
 
 Run celery worker:  
-`celery -A hexopress worker`
+`celery -A hexopress worker` 
 
 Now, pointing your browser to http://localhost:8000 should land it to your dev instance.
+
+### Production setup
+
+Edit settings.py to match your production config especially `settings.ALLOWED_HOSTS, settings.HOST and settings.CLIENT_SECRET (for google auth)`
+Use a process manager like supervisord to manage your processes. 
+
+Sample supervisord config
+```
+[program:daphne]
+command = sh daphne.sh
+stdout_logfile = /home/username/daphne.log
+redirect_stderr = true
+directory = /home/username/hexopress
+
+[program:worker]
+command = sh worker.sh
+stdout_logfile = /home/username/worker.log
+redirect_stderr = true
+directory = /home/username/hexopress
+
+[program:celery]
+command = sh celery.sh
+stdout_logfile = /home/username/celery.log
+redirect_stderr = true
+directory = /home/username/hexopress
+``` 
+
+Make sure to run `python manage.py migrate` once before starting the server. Without this your database will have no tables created yet. 
+
+
+
+
   
