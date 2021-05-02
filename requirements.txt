@@ -4,7 +4,7 @@ appnope==0.1.0
 asgi-redis==1.0.0
 asgiref==1.0.0
 attrs==16.3.0
-autobahn==0.17.2
+autobahn==20.12.3
 Automat==0.5.0
 backports.shutil-get-terminal-size==1.0.0
 billiard==3.5.0.2
