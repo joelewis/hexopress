@@ -1,6 +1,6 @@
 import PubSub from 'pubsub-js'
 
-var socket = new WebSocket("ws://" + window.location.host + "/");
+var socket = new WebSocket("wss://" + window.location.host + "/");
 
 socket.onmessage = function(e) {
     console.log(e.data)
