@@ -325,6 +325,13 @@ def serve_blog(request, username, path):
                 document_root=settings.BLOG_DIR_ROOT+'/'+bloguser.email+'/octopress/public/')
 
 
+def privacy_policy(request):
+        template = loader.get_template('privacy.html')
+        return HttpResponse(template.render({
+            "STATIC_HOST": settings.STATIC_HOST
+        }, request))
+
+
 def refresh_accesstoken(request):
     flow = client.flow_from_clientsecrets(
                 settings.CLIENT_SECRET_FILE,
