@@ -85,6 +85,7 @@ def remove_extn(filename):
 def get_md_callback(file_meta, user):
     def callback(request_id, response, exception):
         if exception is None:
+            print "got md file from google: " + file_meta['name']
             file_name = file_meta['name'].replace(' ', '-')
             file_name = remove_extn(file_name)
             created_time_str = file_meta['createdTime']
@@ -118,6 +119,7 @@ def get_md_callback(file_meta, user):
 def get_callback(file_meta, user):
     def callback(request_id, response, exception):
         if exception is None:
+            print "got docx file from google: " + file_meta['name']
             file_name = file_meta['name'].replace(' ', '-')
             created_time_str = file_meta['createdTime']
             created_time = dateutil.parser.parse(created_time_str)
@@ -337,7 +339,11 @@ def generate_blog(user_id, channel_id, message):
         reply_channel.send('blog_generation_progress', {"progress": 40})
         response = files
         clean_conversion_dir(user)
+        print "downloading docx files: "
+        print files["files"]
         download_docx_files(user, drive_service, files['files'])
+        print "downloading md files: "
+        print md_files["files"]
         download_md_files(user, drive_service, md_files['files'])
         reply_channel.send('blog_generation_progress', {"progress": 60})
         copy2octopress(reply_channel, googleuser)
