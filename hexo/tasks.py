@@ -219,6 +219,7 @@ def download_md_files(user, service, files):
             pass
 
 def copydir(src, dst):
+    print "copying {0} to {1}".format(src, dst)
     try:
         shutil.copytree(src, dst)
     except OSError as exc: # python >2.5
@@ -226,6 +227,8 @@ def copydir(src, dst):
             shutil.copy(src, dst)
         else:
             # directory already exists. it's ok to pass.
+            print "Couldn't copy {0} to {1}".format(src, dst)
+            print exc
             pass
 
 def refresh_config(user):
@@ -257,13 +260,19 @@ def refresh_config(user):
     ), config_file)
 
 def create_octopress(user):
+    print "creating octopress for user " + user.email
     googleuser = GoogleUser.objects.get(user=user)
+    # copydir(settings.OCTOPRESS_CLONE, '{0}/{1}/octopress'.format(
+    #     settings.BLOG_DIR_ROOT,
+    #     user.email
+    # ))
+    # SINCE shutil.copytree was behaving erratically, falling back to rsync for now. We'll figure out the problem later
+    user_octopress_dir = '{0}/{1}/octopress'.format(settings.BLOG_DIR_ROOT, user.email)
+    ensure_dir(user_octopress_dir)
+    rsync_command = 'rsync -r {0}/ {1}'.format(settings.OCTOPRESS_CLONE,  user_octopress_dir)
+    print "executing: " + rsync_command
+    subprocess.call(rsync_command, shell=True)
 
-    copydir(settings.OCTOPRESS_CLONE, '{0}/{1}/octopress'.format(
-        settings.BLOG_DIR_ROOT,
-        user.email
-    ))
-    
     refresh_config(user)
 
     googleuser.is_site_generated = True
@@ -344,11 +353,13 @@ def copy2octopress(reply_channel, googleuser):
     """
 
     user = googleuser.user
-    ensure_dir('{0}/{1}'.format(settings.BLOG_DIR_ROOT, user.email))
-    # googleuser.is_site_generated = False
+    user_octopress_dir = '{0}/{1}/octopress'.format(settings.BLOG_DIR_ROOT, user.email)
+    ensure_dir(user_octopress_dir)
+    googleuser.is_site_generated = False
     if not googleuser.is_site_generated:
         # call routine to generate octopress for that user
         create_octopress(user)
+    
 
     # refresh config
     refresh_config(user)
@@ -371,7 +382,8 @@ def copy2octopress(reply_channel, googleuser):
     # clean conversion directory to free some space
     clean_conversion_dir(user)
     # run rake generate
-    subprocess.call('rake generate',
+
+    subprocess.call('bundle exec rake generate',
                     cwd='{0}/{1}/octopress'.format(settings.BLOG_DIR_ROOT,
                                                    user.email),
                     shell=True)
