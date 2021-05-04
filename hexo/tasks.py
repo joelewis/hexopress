@@ -355,7 +355,6 @@ def copy2octopress(reply_channel, googleuser):
     user = googleuser.user
     user_octopress_dir = '{0}/{1}/octopress'.format(settings.BLOG_DIR_ROOT, user.email)
     ensure_dir(user_octopress_dir)
-    googleuser.is_site_generated = False
     if not googleuser.is_site_generated:
         # call routine to generate octopress for that user
         create_octopress(user)
