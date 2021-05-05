@@ -85,7 +85,7 @@ def google_login(request):
 
     credentials = client.credentials_from_clientsecrets_and_code(
         settings.CLIENT_SECRET_FILE,
-        ['https://www.googleapis.com/auth/drive.file', 'profile', 'email'],
+        ['https://www.googleapis.com/auth/drive', 'profile', 'email'],
         auth_code)
     email = credentials.id_token['email']
     guser_id = credentials.id_token['sub']
@@ -335,7 +335,7 @@ def privacy_policy(request):
 def refresh_accesstoken(request):
     flow = client.flow_from_clientsecrets(
                 settings.CLIENT_SECRET_FILE,
-                scope='https://www.googleapis.com/auth/drive.file profile email',
+                scope='https://www.googleapis.com/auth/drive profile email',
                 redirect_uri=settings.HOST_ADDR+'/oauth2callback')
     flow.params['state'] = urllib.urlencode(request.GET)
     # flow.params['access_type'] = 'offline'         # offline access
@@ -348,7 +348,7 @@ def oauth2callback(request):
     print auth_code
     credentials = client.credentials_from_clientsecrets_and_code(
         settings.CLIENT_SECRET_FILE,
-        ['https://www.googleapis.com/auth/drive.file', 'profile', 'email'],
+        ['https://www.googleapis.com/auth/drive', 'profile', 'email'],
         auth_code,
         redirect_uri=settings.HOST_ADDR+'/oauth2callback')
     # credentials = flow.step2_exchange(auth_code)
