@@ -331,6 +331,12 @@ def privacy_policy(request):
             "STATIC_HOST": settings.STATIC_HOST
         }, request))
 
+def google_disclosure(request):
+        template = loader.get_template('google-disclosure.html')
+        return HttpResponse(template.render({
+            "STATIC_HOST": settings.STATIC_HOST
+        }, request))
+
 
 def refresh_accesstoken(request):
     flow = client.flow_from_clientsecrets(

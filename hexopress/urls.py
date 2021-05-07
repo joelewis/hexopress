@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^privacy/', views.privacy_policy, name='privacy_policy'),
+    url(r'^google-disclosure/', views.google_disclosure, name='google_policy'),
+    
     url(r'^googlelogin/$', views.google_login, name='google_login'),
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^refreshblog/$', views.refresh_blog, name='refresh_blog'),
