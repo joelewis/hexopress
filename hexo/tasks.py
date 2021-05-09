@@ -261,6 +261,18 @@ def refresh_config(user):
         user.email
     ), config_file)
 
+    # fill about me section
+    about_template = loader.get_template('about.html')
+    about_file = about_template.render({
+        "description": description
+    })
+
+    write2file('{0}/{1}/octopress/source/_includes/custom/asides/about.html'.format(
+        settings.BLOG_DIR_ROOT,
+        user.email
+    ), about_file)
+
+
 def create_octopress(user):
     print "creating octopress for user " + user.email
     googleuser = GoogleUser.objects.get(user=user)
