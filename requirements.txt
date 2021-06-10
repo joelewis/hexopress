@@ -13,7 +13,7 @@ channels==1.0.3
 constantly==15.1.0
 daphne==1.0.3
 decorator==4.0.11
-Django==1.10.6
+Django==2.2.24
 enum34==1.1.6
 google-api-python-client==1.6.2
 httplib2==0.10.3
