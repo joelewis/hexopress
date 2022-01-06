@@ -8,7 +8,7 @@ autobahn==0.17.2
 Automat==0.5.0
 backports.shutil-get-terminal-size==1.0.0
 billiard==3.5.0.2
-celery==4.0.2
+celery==5.2.2
 channels==1.0.3
 constantly==15.1.0
 daphne==1.0.3
