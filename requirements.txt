@@ -18,7 +18,7 @@ enum34==1.1.6
 google-api-python-client==1.6.2
 httplib2==0.10.3
 incremental==16.10.1
-ipython==5.2.2
+ipython==7.16.3
 ipython-genutils==0.1.0
 kombu==4.0.2
 msgpack-python==0.4.8
