@@ -42,7 +42,7 @@ scandir==1.5
 simplegeneric==0.8.1
 six==1.10.0
 traitlets==4.3.1
-Twisted==17.1.0
+Twisted==22.10.0
 txaio==2.6.1
 uritemplate==3.0.0
 vine==1.1.3
